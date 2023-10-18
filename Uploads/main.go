@@ -50,6 +50,13 @@ func main() {
 	maxFileSize := int64(config.MaxFileSizeMB) << 20
 	router.MaxMultipartMemory = maxFileSize
 
+
+router.GET("/", func(c *gin.Context) {
+		c.String(http.StatusOK, "Index of uploads api")
+	})
+
+
+
 	router.POST("/upload", func(c *gin.Context) {
 		file, err := c.FormFile("file")
 		if err != nil {
