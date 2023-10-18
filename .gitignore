@@ -1,0 +1,55 @@
+# Go
+*.exe
+*.dll
+*.so
+*.dylib
+/_test
+/vendor/
+/Godeps/
+/.glide/
+/bin/
+/pkg/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Node.js
+node_modules/
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+dist
+dist-ssr
+*.local
+
+
+# Custom
+uploads/
+bin/
+upload_log.json
+homepage/wserve/public
+
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
