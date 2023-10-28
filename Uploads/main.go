@@ -102,7 +102,7 @@ router.GET("/", func(c *gin.Context) {
 
 	router.Static("/uploads", config.UploadFolder)
 
-	router.GET("/info", func(c *gin.Context) {
+/*	router.GET("/info", func(c *gin.Context) {
 		fileID := c.DefaultQuery("fid", "") // Get the "fid" query parameter
 
 		if fileID == "" {
@@ -129,7 +129,56 @@ router.GET("/", func(c *gin.Context) {
 		}
 
 		c.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
-	})
+	})*/
+
+router.GET("/info", func(c *gin.Context) {
+    fileID := c.DefaultQuery("file", "") // Get the "file" query parameter
+
+    if fileID == "" {
+        // If no specific file is requested, return all lists
+        logFile, logErr := os.Open(config.LogFileName)
+        if logErr != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": logErr.Error()})
+            return
+        }
+        defer logFile.Close()
+
+        var allFiles []FileData
+        decoder := json.NewDecoder(logFile)
+        for decoder.More() {
+            var fileData FileData
+            if decodeErr := decoder.Decode(&fileData); decodeErr == nil {
+                allFiles = append(allFiles, fileData)
+            }
+        }
+        c.JSON(http.StatusOK, allFiles)
+        return
+    }
+
+    // If a specific file is requested, return information for that file
+    logFile, logErr := os.Open(config.LogFileName)
+    if logErr != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": logErr.Error()})
+        return
+    }
+    defer logFile.Close()
+
+    decoder := json.NewDecoder(logFile)
+    for decoder.More() {
+        var fileData FileData
+        if decodeErr := decoder.Decode(&fileData); decodeErr == nil {
+            if fileData.ID == fileID {
+                c.JSON(http.StatusOK, fileData)
+                return
+            }
+        }
+    }
+
+    c.JSON(http.StatusNotFound, gin.H{"error": "File not found"})
+})
+
+
+
 
 	router.Run(":" + config.Port)
 }

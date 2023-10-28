@@ -15,8 +15,9 @@ def get_system_info():
     disk_partitions = psutil.disk_partitions()
     disk_usage = psutil.disk_usage('/')
     net_io_counters = psutil.net_io_counters()
-
+    boot_time = psutil.boot_time()
     system_info = {
+        'boot_time': boot_time,
         'cpu_count': cpu_count,
         'cpu_percent': cpu_percent,
         'memory_info': {
@@ -25,7 +26,6 @@ def get_system_info():
             'available': memory_info.available,
             'percent': memory_info.percent
         },
-        'disk_partitions': [p._asdict() for p in disk_partitions],
         'disk_usage': {
             'total': disk_usage.total,
             'used': disk_usage.used,
